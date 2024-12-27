@@ -79,9 +79,6 @@ def Graphs():
         # Pastikan 'Biaya Iklan Total' adalah numerik
         sum_by_product['Omzet Iklan Total'] = pd.to_numeric(sum_by_product['Omzet Iklan Total'], errors='coerce')
         sum_by_product.dropna(subset=['Omzet Iklan Total'], inplace=True)
-        
-        # Set format mata uang ke Rupiah
-        locale.setlocale(locale.LC_ALL, 'id_ID')
 
         # Urutkan data berdasarkan omzet (descending) dan ambil 5 teratas
         data_top5 = sum_by_product.sort_values('Omzet Iklan Total', ascending=False).head(5)
