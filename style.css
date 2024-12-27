@@ -1,0 +1,22 @@
+[data-testid=metric-container] {
+    box-shadow: 0 0 4px #ccc;
+    padding: 10px;
+}
+
+.plot-container>div {
+    box-shadow: 0 0 4px #ccc;
+    padding: 10px;
+}
+
+div[data-testid="stExpander"] div[role="button"] p {
+    font-size: 1.3rem;
+    color: rgb(235, 238, 238);
+}
+
+.stButton > button {
+    color: #028391;
+}
+
+.stMetric {
+    font-size: 8px; /* Sesuaikan ukuran font sesuai keinginan */
+}
