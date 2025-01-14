@@ -58,7 +58,7 @@ def Graphs():
         sum_by_team.dropna(subset=['Biaya Iklan Total'], inplace=True)
 
         # Buat pie chart
-        colors = ['#dbd5cc', '#54afaf', '#abbc65', '#94bbb7', '#5ec2cb']
+        colors = ['#E9E4DF', '#54afaf', '#abbc65', '#94bbb7', '#5ec2cb']
 
         fig, ax = plt.subplots()
         ax.pie(sum_by_team['Biaya Iklan Total'],
@@ -79,6 +79,9 @@ def Graphs():
         # Pastikan 'Biaya Iklan Total' adalah numerik
         sum_by_product['Omzet Iklan Total'] = pd.to_numeric(sum_by_product['Omzet Iklan Total'], errors='coerce')
         sum_by_product.dropna(subset=['Omzet Iklan Total'], inplace=True)
+        
+        # Set format mata uang ke Rupiah
+        locale.setlocale(locale.LC_ALL, 'id_ID')
 
         # Urutkan data berdasarkan omzet (descending) dan ambil 5 teratas
         data_top5 = sum_by_product.sort_values('Omzet Iklan Total', ascending=False).head(5)
@@ -286,69 +289,60 @@ def Organik():
 
     st.markdown("""---""")
 
-# SHOW BUTTON Data Iklan Keyword
+st.markdown("""---""")
 
-if 'show_data1' not in st.session_state:
-    st.session_state.show_data = False
+import streamlit as st
 
-if st.button('Tampilkan Data Iklan Keyword'):
-    st.session_state.show_data = not st.session_state.show_data
+# Inisialisasi status untuk setiap tombol
+if 'content_1' not in st.session_state:
+    st.session_state.content_1 = False
+if 'content_2' not in st.session_state:
+    st.session_state.content_2 = False
+if 'content_3' not in st.session_state:
+    st.session_state.content_3 = False
+if 'content_4' not in st.session_state:
+    st.session_state.content_4 = False
+if 'content_5' not in st.session_state:
+    st.session_state.content_5 = False
 
-if st.session_state.show_data:
-    # Tampilkan data
+# Fungsi untuk toggle masing-masing konten
+def toggle_content(content_key):
+    st.session_state[content_key] = not st.session_state[content_key]
+
+# CONTENT
+
+st.subheader("Data Iklan Toko")
+# Tombol untuk menampilkan/menyembunyikan konten
+if st.button('Tampilkan Data Iklan Toko'):
+    toggle_content('content_1')
+# Konten yang akan ditampilkan/ disembunyikan
+if st.session_state.content_1:
     Keyword()
-    
 
-# SHOW BUTTON Data Iklan Affiliate
-
-if 'show_data2' not in st.session_state:
-    st.session_state.show_data = False
-
+st.subheader("Data Iklan Affiliate")
 if st.button('Tampilkan Data Iklan Affiliate'):
-    st.session_state.show_data = not st.session_state.show_data
-
-if st.session_state.show_data:
-    # Tampilkan data
+    toggle_content('content_2')
+if st.session_state.content_2:
     Affilliate()
-    
 
-# SHOW BUTTON Data Iklan Cpas
-
-if 'show_data3' not in st.session_state:
-    st.session_state.show_data = False
-
+st.subheader("Data Iklan CPAS")
 if st.button('Tampilkan Data Iklan CPAS'):
-    st.session_state.show_data = not st.session_state.show_data
-
-if st.session_state.show_data:
-    # Tampilkan data
+    toggle_content('content_3')
+if st.session_state.content_3:
     Cpas()
-    
 
-# SHOW BUTTON Data Iklan Total
-
-if 'show_data4' not in st.session_state:
-    st.session_state.show_data = False
-
-if st.button('Tampilkan Data Iklan Total'):
-    st.session_state.show_data = not st.session_state.show_data
-
-if st.session_state.show_data:
-    # Tampilkan data
-    Total()
-    
-
-# SHOW BUTTON Data Iklan Organik
-
-if 'show_data5' not in st.session_state:
-    st.session_state.show_data = False
-
+st.subheader("Data Iklan Organik")
 if st.button('Tampilkan Data Iklan Organik'):
-    st.session_state.show_data = not st.session_state.show_data
-
-if st.session_state.show_data:
-    # Tampilkan data
+    toggle_content('content_4')
+if st.session_state.content_4:
     Organik()
+
+st.subheader("Data Iklan Total")
+if st.button('Tampilkan Data Iklan Total'):
+    toggle_content('content_5')
+if st.session_state.content_5:
+    Total()
+
 
 st.header('Tabel Report Bulan Oktober')
 st.dataframe(df)
