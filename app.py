@@ -81,7 +81,10 @@ def Graphs():
         sum_by_product.dropna(subset=['Omzet Iklan Total'], inplace=True)
         
         # Set format mata uang ke Rupiah
-        locale.setlocale(locale.LC_ALL, 'id_ID')
+        try:
+            locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')  # Gunakan UTF-8
+        except locale.Error:
+            locale.setlocale(locale.LC_ALL, '')  # Fallback ke locale default
 
         # Urutkan data berdasarkan omzet (descending) dan ambil 5 teratas
         data_top5 = sum_by_product.sort_values('Omzet Iklan Total', ascending=False).head(5)
