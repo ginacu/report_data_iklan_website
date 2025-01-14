@@ -2,10 +2,9 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import locale
+from babel.numbers import format_currency
 from streamlit_lottie import st_lottie
 import requests
-from streamlit_lottie import st_lottie_spinner
 
 # Page Behaviour
 st.set_page_config(page_title='Report Oktober', page_icon='📊', layout="wide")
@@ -69,22 +68,16 @@ def Graphs():
         st.pyplot(fig)
     
     with grafik2:
+        # Grouping data by product
         grup_product = df.groupby('Produk')
-        sum_by_product  = grup_product.sum()
-        # st.dataframe(sum_by_team)
+        sum_by_product = grup_product.sum()
 
         # Reset index untuk menjadikan indeks sebagai kolom
-        sum_by_product  = sum_by_product.reset_index()
+        sum_by_product = sum_by_product.reset_index()
 
         # Pastikan 'Biaya Iklan Total' adalah numerik
         sum_by_product['Omzet Iklan Total'] = pd.to_numeric(sum_by_product['Omzet Iklan Total'], errors='coerce')
         sum_by_product.dropna(subset=['Omzet Iklan Total'], inplace=True)
-        
-        # Set format mata uang ke Rupiah
-        try:
-            locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')  # Gunakan UTF-8
-        except locale.Error:
-            locale.setlocale(locale.LC_ALL, '')  # Fallback ke locale default
 
         # Urutkan data berdasarkan omzet (descending) dan ambil 5 teratas
         data_top5 = sum_by_product.sort_values('Omzet Iklan Total', ascending=False).head(5)
@@ -98,8 +91,11 @@ def Graphs():
         plt.ylabel('Omzet (Rp)', fontsize=16)
         plt.title('Perbandingan Omzet Penjualan Produk', fontsize=20)
 
-        # Format sumbu y menjadi Rupiah
-        plt.gca().yaxis.set_major_formatter(lambda x, pos: locale.currency(x, grouping=True))
+        # Format sumbu y menjadi Rupiah menggunakan Babel
+        def rupiah_format(x, pos):
+            return format_currency(x, 'IDR', locale='id_ID')
+
+        plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(rupiah_format))
 
         st.pyplot(plt)
     
